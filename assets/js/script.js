@@ -3,26 +3,27 @@ var formEl = document.getElementById("pokemon-form");
 var submitNameEl  = document.getElementById("typed-name");
 var pokemonContainerEl = document.getElementById("poke-container")
 var pokemonName = "";
+
 function fetchSelectedPokemon(){
-  fetch('https://pokeapi.co/api/v2/pokemon/' + pokemonName).then(function(response){
+  var searchName = pokemonName.replace(/\s/g, '-')
+  fetch('https://pokeapi.co/api/v2/pokemon/' + searchName).then(function(response){
     if (response.ok) {
       pokemonContainerEl.innerHTML = '';
       response.json().then(function(selectedpokemon) {
       console.log(selectedpokemon)
       var chosenPokemon = document.createElement("div")
         chosenPokemon.innerHTML = "<h2>" + pokemonName.replace(/(^\w|\s\w)/g, m => m.toUpperCase()) + "</h2>" +
-          "<img src='"+ selectedpokemon.sprites.front_default +"' ></img>"
+          "<img src='"+ selectedpokemon.sprites.front_default +"' ></img>" + 
+          "<p>"+ selectedpokemon.types[0].type.name +"</p>" +
+          "<p>"+ selectedpokemon.types[1].type.name +"</p>"
         pokemonContainerEl.appendChild(chosenPokemon)
-
       })
     } else {
       alert("Pokemon not found.\nPlease check your spelling and try again.")
       return
     }
-          // selectedpokemon.results.forEach(function(pokemon){
-      //  fetchPokemonData(pokemon); 
   });
-}       
+};       
 // function fetchKantoPokemon(){
 //     fetch('https://pokeapi.co/api/v2/pokemon?limit=251')
 //      .then(response => response.json())
